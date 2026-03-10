@@ -1,17 +1,17 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
-  "name": "io.github.michaeljiangmingfeng-debug/quanttogo-mcp",
+  "name": "io.github.QuantToGo/quanttogo-mcp",
   "description": "Quantitative trading strategies, market indices, and live performance data",
   "repository": {
-    "url": "https://github.com/michaeljiangmingfeng-debug/quanttogo-mcp",
+    "url": "https://github.com/QuantToGo/quanttogo-mcp",
     "source": "github"
   },
-  "version": "0.1.2",
+  "version": "0.1.6",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "quanttogo-mcp",
-      "version": "0.1.2",
+      "version": "0.1.6",
       "transport": {
         "type": "stdio"
       }
