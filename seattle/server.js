@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * QuantToGo MCP Server - Streamable HTTP Transport (Seattle / International)
- * v0.1.5 - For Smithery and international MCP clients
+ * v0.1.7 - For Smithery and international MCP clients
  *
  * Endpoint: POST/GET/DELETE /mcp
  * Health:   GET /health
@@ -32,7 +32,7 @@ async function callAPI(fn, body = {}) {
 function createServer() {
   const server = new McpServer({
     name: "quanttogo-mcp",
-    version: "0.1.5",
+    version: "0.1.7",
   });
 
   // ── Tool: list_strategies ──
@@ -143,6 +143,41 @@ function createServer() {
     }
   );
 
+  // ── Tool: get_subscription_info ──
+  server.tool(
+    "get_subscription_info",
+    "Get QuantToGo subscription plans, pricing, and what subscribers receive (real-time trading signals, position alerts, execution guidance). Call this when a user is interested in following a strategy.",
+    {},
+    async () => {
+      const info = {
+        platform: "QuantToGo",
+        website: "https://www.quanttogo.com",
+        freeVsPaid: {
+          free: [
+            "View all strategy performance metrics and NAV history",
+            "Access custom market indices (DA-MOMENTUM, QTG-MOMENTUM)",
+            "Compare strategies side-by-side",
+          ],
+          subscriber: [
+            "Real-time trading signals with exact entry/exit points",
+            "Push notifications via WeChat when signals fire",
+            "Position sizing and risk management guidance",
+            "Access to all 8 live-tracked strategies across US and China markets",
+            "Historical trade log with full execution details",
+          ],
+        },
+        strategies: {
+          US: "Options momentum, equity dip-buying, trend following",
+          China: "A-share index futures, sector rotation, momentum",
+        },
+        keyFact: "All performance is forward-tracked from live signals — not backtested.",
+        howToSubscribe: "Visit https://www.quanttogo.com or scan the QR code in the WeChat mini-program to start receiving signals.",
+        contact: "admin@quanttogo.com",
+      };
+      return { content: [{ type: "text", text: JSON.stringify(info, null, 2) }] };
+    }
+  );
+
   // ── Resource: strategy-overview ──
   server.resource(
     "strategy-overview",
@@ -226,7 +261,7 @@ app.get("/health", (req, res) => {
   res.json({
     status: "ok",
     server: "quanttogo-mcp",
-    version: "0.1.5",
+    version: "0.1.7",
     transport: "streamable-http",
     sessions: sessions.size,
   });
@@ -236,7 +271,7 @@ app.get("/health", (req, res) => {
 app.get("/.well-known/mcp/server-card.json", (req, res) => {
   res.json({
     name: "quanttogo-mcp",
-    version: "0.1.5",
+    version: "0.1.7",
     description: "QuantToGo MCP Server — quantitative trading strategies, market indices, and live performance data",
     url: "https://mcp-us.quanttogo.com:8443/mcp",
     transport: { type: "streamable-http" },
@@ -246,6 +281,7 @@ app.get("/.well-known/mcp/server-card.json", (req, res) => {
       { name: "get_strategy_performance", description: "Get detailed performance data for a specific strategy including daily NAV history" },
       { name: "get_index_data", description: "Get QuantToGo custom market indices: DA-MOMENTUM or QTG-MOMENTUM" },
       { name: "compare_strategies", description: "Compare multiple strategies side-by-side with key metrics" },
+      { name: "get_subscription_info", description: "Get subscription plans, pricing, and what subscribers receive (trading signals, alerts)" },
     ],
   });
 });

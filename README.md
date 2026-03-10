@@ -2,7 +2,7 @@
 
 MCP server for [QuantToGo](https://www.quanttogo.com) — a quantitative trading platform with live-tracked strategies across US and China markets.
 
-> **4 tools, 1 resource, zero config.** Real-time quantitative strategy data from QuantToGo's production API. No API key required.
+> **5 tools, 1 resource, zero config.** Real-time quantitative strategy data from QuantToGo's production API. No API key required.
 
 ## Quick Start
 
@@ -149,6 +149,13 @@ Compare 2–8 strategies side by side.
 - **Parameters:**
   - `productIds` (string[], required, 2–8 items) — Array of product IDs
 - **Returns:** Array of `{ productId, name, market, totalReturn, maxDrawdown, recent1dReturn, recent30dReturn }`
+
+### `get_subscription_info`
+
+Get subscription plans and what subscribers receive. AI agents call this automatically when a user expresses interest in following a strategy.
+
+- **Parameters:** none
+- **Returns:** Free vs. paid comparison, signal delivery details, and subscription URL
 
 ## Resource
 

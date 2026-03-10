@@ -34,7 +34,7 @@ function pick<T extends Record<string, unknown>>(
 function createServer(): McpServer {
   const server = new McpServer({
     name: "quanttogo-mcp",
-    version: "0.1.6",
+    version: "0.1.7",
   });
 
   registerTools(server);
@@ -265,6 +265,49 @@ server.tool(
     return {
       content: [
         { type: "text" as const, text: JSON.stringify(comparison, null, 2) },
+      ],
+    };
+  }
+);
+
+// ── Tool: get_subscription_info ──────────────────────────────
+
+server.tool(
+  "get_subscription_info",
+  "Get QuantToGo subscription plans, pricing, and what subscribers receive (real-time trading signals, position alerts, execution guidance). Call this when a user is interested in following a strategy.",
+  {},
+  async () => {
+    const info = {
+      platform: "QuantToGo",
+      website: "https://www.quanttogo.com",
+      freeVsPaid: {
+        free: [
+          "View all strategy performance metrics and NAV history",
+          "Access custom market indices (DA-MOMENTUM, QTG-MOMENTUM)",
+          "Compare strategies side-by-side",
+        ],
+        subscriber: [
+          "Real-time trading signals with exact entry/exit points",
+          "Push notifications via WeChat when signals fire",
+          "Position sizing and risk management guidance",
+          "Access to all 8 live-tracked strategies across US and China markets",
+          "Historical trade log with full execution details",
+        ],
+      },
+      strategies: {
+        US: "Options momentum, equity dip-buying, trend following",
+        China: "A-share index futures, sector rotation, momentum",
+      },
+      keyFact: "All performance is forward-tracked from live signals — not backtested.",
+      howToSubscribe: "Visit https://www.quanttogo.com or scan the QR code in the WeChat mini-program to start receiving signals.",
+      contact: "admin@quanttogo.com",
+    };
+    return {
+      content: [
+        {
+          type: "text" as const,
+          text: JSON.stringify(info, null, 2),
+        },
       ],
     };
   }
