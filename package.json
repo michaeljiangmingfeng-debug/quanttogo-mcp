@@ -1,6 +1,6 @@
 {
   "name": "quanttogo-mcp",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "QuantToGo MCP Server — quantitative trading strategies, indices, and market signals for AI agents",
   "mcpName": "io.github.michaeljiangmingfeng-debug/quanttogo-mcp",
   "main": "dist/index.js",
@@ -46,6 +46,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "esbuild": "^0.27.3",
     "typescript": "^5.7.0"
   }
 }

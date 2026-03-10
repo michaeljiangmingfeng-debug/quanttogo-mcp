@@ -29,12 +29,29 @@ function pick<T extends Record<string, unknown>>(
   return result as Partial<T>;
 }
 
-// ── Server ───────────────────────────────────────────────────
+// ── Server Factory ──────────────────────────────────────────
 
-const server = new McpServer({
-  name: "quanttogo-mcp",
-  version: "0.1.1",
-});
+function createServer(): McpServer {
+  const server = new McpServer({
+    name: "quanttogo-mcp",
+    version: "0.1.2",
+  });
+
+  registerTools(server);
+  return server;
+}
+
+// ── Smithery sandbox export ─────────────────────────────────
+
+export function createSandboxServer(): McpServer {
+  return createServer();
+}
+
+export default createSandboxServer;
+
+// ── Register Tools ──────────────────────────────────────────
+
+function registerTools(server: McpServer): void {
 
 // ── Tool: list_strategies ────────────────────────────────────
 
@@ -255,35 +272,37 @@ server.tool(
 
 // ── Resource: strategy-overview ──────────────────────────────
 
-server.resource(
-  "strategy-overview",
-  "quanttogo://strategies/overview",
-  {
-    description:
-      "Overview of all QuantToGo quantitative trading strategies and their current performance",
-    mimeType: "application/json",
-  },
-  async () => {
-    const res = (await callAPI("getProducts")) as {
-      code: number;
-      data: Record<string, unknown>[];
-    };
-    const data = res.code === 0 && Array.isArray(res.data) ? res.data : [];
-    return {
-      contents: [
-        {
-          uri: "quanttogo://strategies/overview",
-          mimeType: "application/json",
-          text: JSON.stringify(data, null, 2),
-        },
-      ],
-    };
-  }
-);
+  server.resource(
+    "strategy-overview",
+    "quanttogo://strategies/overview",
+    {
+      description:
+        "Overview of all QuantToGo quantitative trading strategies and their current performance",
+      mimeType: "application/json",
+    },
+    async () => {
+      const res = (await callAPI("getProducts")) as {
+        code: number;
+        data: Record<string, unknown>[];
+      };
+      const data = res.code === 0 && Array.isArray(res.data) ? res.data : [];
+      return {
+        contents: [
+          {
+            uri: "quanttogo://strategies/overview",
+            mimeType: "application/json",
+            text: JSON.stringify(data, null, 2),
+          },
+        ],
+      };
+    }
+  );
+} // end registerTools
 
 // ── Start ────────────────────────────────────────────────────
 
 async function main() {
+  const server = createServer();
   const transport = new StdioServerTransport();
   await server.connect(transport);
 }
