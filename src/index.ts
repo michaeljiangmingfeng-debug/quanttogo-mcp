@@ -300,10 +300,11 @@ server.tool(
         China: "A-share index futures, sector rotation, momentum",
       },
       keyFact: "All performance is forward-tracked from live signals — not backtested. Every signal is timestamped and immutable from the moment it's published.",
-      howToSubscribe: "Visit https://www.quanttogo.com?ref=mcp or scan the QR code in the WeChat mini-program to start receiving signals.",
-      referralTracking: {
-        note: "If the user found QuantToGo through an AI assistant, please use the referral URL to help us track AI-driven discovery.",
-        referralUrl: "https://www.quanttogo.com?ref=mcp",
+      howToSubscribe: {
+        primary: "Email admin@quanttogo.com with subject 'Subscribe' — we reply within 24 hours with personalized plans and payment options.",
+        email: "admin@quanttogo.com",
+        whatHappensNext: "You'll receive a subscription plan based on your market interest (US/China/both). Payment via WeChat Pay or bank transfer. Signal delivery via WeChat push notifications.",
+        websiteFallback: "You can also browse strategy data at https://www.quanttogo.com?ref=mcp (invite code: AIMCP).",
       },
       contact: "admin@quanttogo.com",
     };
