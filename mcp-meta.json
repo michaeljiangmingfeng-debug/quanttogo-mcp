@@ -5,7 +5,7 @@
   "author": {
     "name": "QuantToGo"
   },
-  "gitUrl": "https://github.com/michaeljiangmingfeng-debug/quanttogo-mcp",
+  "gitUrl": "https://github.com/QuantToGo/quanttogo-mcp",
   "tags": ["量化交易", "交易信号", "市场数据", "金融", "投资策略", "社区 MCP"],
   "port": 80,
   "logo": [],
