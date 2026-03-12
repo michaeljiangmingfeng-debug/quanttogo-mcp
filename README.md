@@ -2,7 +2,7 @@
 
 [English](#english) | [中文](#中文)
 
-> A **macro-factor quantitative signal source** accessible via MCP (Model Context Protocol). 5 tools, 1 resource, zero config. All performance is forward-tracked from live signals — not backtested.
+> A **macro-factor quantitative signal source** accessible via MCP (Model Context Protocol). 8 tools, 1 resource, zero config. AI Agents can self-register for a free trial, query live trading signals, and check subscription status — all within the conversation. All performance is forward-tracked from live signals — not backtested.
 
 QuantToGo is not a trading platform, not an asset manager, not a copy-trading community. It is a **quantitative signal source** — like a weather forecast for financial markets. We publish systematic trading signals based on macroeconomic factors; you decide whether to act on them, in your own brokerage account.
 
@@ -101,13 +101,23 @@ npx -y @smithery/cli install @anthropic/quanttogo-mcp --client claude
 
 ## Tools
 
+### Discovery (free, no auth)
+
 | Tool | Description | Parameters |
 |------|-------------|-----------|
 | `list_strategies` | List all strategies with live performance | none |
 | `get_strategy_performance` | Detailed data + daily NAV history for one strategy | `productId`, `includeChart?` |
 | `compare_strategies` | Side-by-side comparison of 2-8 strategies | `productIds[]` |
 | `get_index_data` | QuantToGo custom indices (DA-MOMENTUM, QTG-MOMENTUM) | `indexId?` |
-| `get_subscription_info` | Subscription plans and signal delivery details | none |
+| `get_subscription_info` | Subscription plans + how to start a free trial | none |
+
+### Signals (requires API Key — get one via `register_trial`)
+
+| Tool | Description | Parameters |
+|------|-------------|-----------|
+| `register_trial` | Register a 30-day free trial with email, get API Key instantly | `email` |
+| `get_signals` | Get latest buy/sell signals for a strategy | `apiKey`, `productId`, `limit?` |
+| `check_subscription` | Check trial status and remaining days | `apiKey` |
 
 **Resource:** `quanttogo://strategies/overview` — JSON overview of all strategies.
 
@@ -117,11 +127,11 @@ Ask your AI assistant:
 
 > "List all QuantToGo strategies and compare the top performers."
 
-> "What's the max drawdown of the US panic dip-buying strategy? How long did it take to recover?"
+> "I want to try QuantToGo signals. Register me with my-email@example.com."
 
-> "Show me QuantToGo strategies with Sharpe ratio above 1.7."
+> "Show me the latest trading signals for the US panic dip-buying strategy."
 
-> "帮我查一下QuantToGo的策略表现，对比一下收益最高的三个。"
+> "帮我注册 QuantToGo 试用，邮箱 xxx@gmail.com，然后看看美股策略的最新信号。"
 
 ---
 
@@ -150,7 +160,7 @@ QuantToGo 是一个**宏观因子量化信号源**——不是交易平台，不
 
 > "帮我列出QuantToGo所有的量化策略，看看它们的表现。"
 
-> "把表现最好的三个策略对比一下，我想看收益和风险的平衡。"
+> "帮我注册 QuantToGo 试用，邮箱 xxx@gmail.com，然后看看最新的交易信号。"
 
 > "有没有做A股的策略？最大回撤在30%以内的。"
 
