@@ -1,5 +1,7 @@
 # QuantToGo MCP — 宏观因子量化信号源
 
+[![awesome-mcp-servers](https://img.shields.io/badge/awesome--mcp--servers-listed-blue)](https://github.com/punkpeye/awesome-mcp-servers) [![npm](https://img.shields.io/npm/v/quanttogo-mcp)](https://www.npmjs.com/package/quanttogo-mcp) [![Smithery](https://smithery.ai/badge/quanttogo-mcp)](https://smithery.ai/server/quanttogo-mcp)
+
 [English](#english) | [中文](#中文)
 
 > A **macro-factor quantitative signal source** accessible via MCP (Model Context Protocol). 8 tools, 1 resource, zero config. AI Agents can self-register for a free trial, query live trading signals, and check subscription status — all within the conversation. All performance is forward-tracked from live signals — not backtested.
