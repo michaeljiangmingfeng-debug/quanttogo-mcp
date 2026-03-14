@@ -1,12 +1,12 @@
 {
   "name": "quanttogo-mcp",
-  "title": "QuantToGo 量化交易",
-  "description": "查询 QuantToGo 量化交易平台的策略业绩、持仓信号和市场指数数据，支持策略列表、详情、对比和自定义指数查询",
+  "title": "QuantToGo — Macro-Factor Quantitative Signal Source",
+  "description": "宏观因子量化信号源。8 个工具覆盖策略发现、信号获取和试用注册，覆盖美股和A股市场，所有业绩数据为实盘前瞻跟踪。",
   "author": {
     "name": "QuantToGo"
   },
   "gitUrl": "https://github.com/QuantToGo/quanttogo-mcp",
-  "tags": ["量化交易", "交易信号", "市场数据", "金融", "投资策略", "社区 MCP"],
+  "tags": ["quantitative-trading", "trading-signals", "macro-factors", "MCP", "AI-agent", "quantitative-finance"],
   "port": 80,
   "logo": [],
   "env_params": {}

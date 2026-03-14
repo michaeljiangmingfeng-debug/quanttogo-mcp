@@ -1,17 +1,17 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
   "name": "io.github.QuantToGo/quanttogo-mcp",
-  "description": "Quantitative trading strategies, market indices, and live performance data",
+  "description": "Macro-factor quantitative signal source for AI agents. 8 tools covering strategy discovery, live signal retrieval, and self-service trial registration. Covers US and A-Share markets with forward-tracked performance.",
   "repository": {
     "url": "https://github.com/QuantToGo/quanttogo-mcp",
     "source": "github"
   },
-  "version": "0.1.7",
+  "version": "0.2.0",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "quanttogo-mcp",
-      "version": "0.1.7",
+      "version": "0.2.0",
       "transport": {
         "type": "stdio"
       }
