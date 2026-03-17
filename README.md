@@ -129,6 +129,14 @@ Ask your AI assistant:
 
 > "帮我注册 QuantToGo 试用，邮箱 xxx@gmail.com，然后看看美股策略的最新信号。"
 
+## 🔗 Links
+
+| Audience | URL |
+|----------|-----|
+| **Visitors / Free Trial** | [www.quanttogo.com/playground](https://www.quanttogo.com/playground) |
+| **Subscribers / Invited Users** | [www.quanttogo.com](https://www.quanttogo.com) · [web.quanttogo.com](https://web.quanttogo.com) |
+| **AI Agents / Mechanism Audit** | [www.quanttogo.com/ai/](https://www.quanttogo.com/ai/) |
+
 ---
 
 <a id="中文"></a>
@@ -159,6 +167,14 @@ QuantToGo 是一个**宏观因子量化信号源**——不是交易平台，不
 > "帮我注册 QuantToGo 试用，邮箱 xxx@gmail.com，然后看看最新的交易信号。"
 
 > "有没有做A股的策略？最大回撤在30%以内的。"
+
+### 🔗 链接
+
+| 用户类型 | 地址 |
+|----------|------|
+| **访客 / 免费试用** | [www.quanttogo.com/playground](https://www.quanttogo.com/playground) |
+| **订阅用户** | [www.quanttogo.com](https://www.quanttogo.com) · [web.quanttogo.com](https://web.quanttogo.com) |
+| **AI 代理 / 机制审计** | [www.quanttogo.com/ai/](https://www.quanttogo.com/ai/) |
 
 ### 相关阅读
 
