@@ -13,15 +13,15 @@ QuantToGo is not a trading platform, not an asset manager, not a copy-trading co
 <!-- PERFORMANCE_TABLE_START -->
 | Strategy | Market | Factor | Total Return | Max Drawdown | Sharpe | Frequency |
 |----------|--------|--------|-------------|-------------|--------|-----------|
-| CNH-CHAU | US | FX: CNH-CSI300 correlation | +986.0% | -43.5% | 2.0 | Weekly |
 | 抄底信号灯（美股） | US | Sentiment: VIX panic reversal | +671.8% | -60.0% | 1.5 | Daily |
+| CNH-CHAU | US | FX: CNH-CSI300 correlation | +659.6% | -43.5% | 2.0 | Weekly |
 | 平滑版3x纳指 | US | Trend: TQQQ timing | +558.3% | -69.9% | 1.4 | Monthly |
 | 大小盘IF-IC轮动 | China | Liquidity: large/small cap rotation | +446.2% | -22.0% | 1.9 | Daily |
 | 聪明钱沪深300择时 | China | FX: CNY-index correlation | +385.8% | -29.9% | 1.8 | Daily |
 | PCR散户反指 | US | Sentiment: Put/Call Ratio | +247.9% | -24.8% | 1.7 | Daily |
 | 冷门股反指 | China | Attention: low-volume value | +227.6% | -32.0% | 1.5 | Monthly |
 | 抄底信号灯（A股） | China | Sentiment: limit-down rebound | +81.8% | -9.1% | 1.6 | Daily |
-> **Last updated: 2026-03-16** · Auto-updated weekly via GitHub Actions · [Verify in git history](../../commits/main/README.md)
+> **Last updated: 2026-03-23** · Auto-updated weekly via GitHub Actions · [Verify in git history](../../commits/main/README.md)
 <!-- PERFORMANCE_TABLE_END -->
 
 All returns are cumulative since inception. Forward-tracked daily — every signal is timestamped at the moment it's published, immutable, including all losses and drawdowns. Git commit history provides an independent audit trail.
