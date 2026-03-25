@@ -18,15 +18,27 @@ async function callAPI(fn: string, body: Record<string, unknown> = {}): Promise<
   return resp.json();
 }
 
+async function validateApiKey(apiKey: string): Promise<{ valid: boolean; message: string }> {
+  const res = (await callAPI("getApiStatus", { apiKey })) as {
+    code: number;
+    message: string;
+  };
+  if (res.code === 401) return { valid: false, message: "Invalid API key. Use register_trial with your email to get a valid key." };
+  if (res.code === 403) return { valid: false, message: "Trial expired. Email admin@quanttogo.com to subscribe." };
+  if (res.code !== 0) return { valid: false, message: res.message || "API key validation failed." };
+  return { valid: true, message: "ok" };
+}
+
 // ── Server Factory ──────────────────────────────────────────
 
 function createServer(): McpServer {
   const server = new McpServer({
     name: "quanttogo-mcp",
-    version: "0.2.0",
+    version: "0.3.0",
   });
 
   registerTools(server);
+  registerPrompts(server);
   return server;
 }
 
@@ -38,7 +50,7 @@ function registerTools(server: McpServer): void {
 
 server.tool(
   "list_strategies",
-  "List all macro-factor quantitative strategies on QuantToGo — a forward-tracked signal source covering US and China markets. Returns strategy name, market, total return, max drawdown, Sharpe ratio, and recent returns. All performance is tracked from live signals, not backtested.",
+  "List all available trading strategies with live performance data. Returns strategy name, market (US/China), total return, drawdown, and recent returns.",
   {},
   async () => {
     const res = (await callAPI("getProducts")) as {
@@ -76,8 +88,9 @@ server.tool(
 
 server.tool(
   "get_strategy_performance",
-  "Get detailed performance data for a specific QuantToGo macro-factor strategy, including daily NAV (net asset value) history for charting. QuantToGo is a quantitative signal source where every signal is timestamped and immutable from the moment it's published. Use productId from list_strategies.",
+  "Get detailed performance for a specific strategy — returns, drawdown, Sharpe, win rate, and daily NAV history for charting. Requires API key (get one free via register_trial).",
   {
+    apiKey: z.string().describe("Your API key from register_trial (starts with 'qtg_')"),
     productId: z.string().describe("Strategy product ID, e.g. 'PROD-E3X'"),
     includeChart: z
       .boolean()
@@ -85,7 +98,12 @@ server.tool(
       .default(true)
       .describe("Include daily NAV data points for charting"),
   },
-  async ({ productId, includeChart }) => {
+  async ({ apiKey, productId, includeChart }) => {
+    const auth = await validateApiKey(apiKey);
+    if (!auth.valid) {
+      return { content: [{ type: "text" as const, text: auth.message }] };
+    }
+
     const [detailRes, chartRes] = await Promise.all([
       callAPI("getProductDetail", { productId }) as Promise<{
         code: number;
@@ -149,14 +167,20 @@ server.tool(
 
 server.tool(
   "get_index_data",
-  "Get QuantToGo custom market indices: DA-MOMENTUM (China A-share momentum index based on CSI300/ChiNext) or QTG-MOMENTUM (strategy-weighted momentum index). Part of QuantToGo's macro-factor quantitative signal source. Returns latest value, daily change, and historical data.",
+  "Get custom market indices — China A-share momentum and strategy-weighted momentum. Requires API key (get one free via register_trial).",
   {
+    apiKey: z.string().describe("Your API key from register_trial (starts with 'qtg_')"),
     indexId: z
       .enum(["DA-MOMENTUM", "QTG-MOMENTUM"])
       .optional()
       .describe("Index ID. Omit to get summary of all indices."),
   },
-  async ({ indexId }) => {
+  async ({ apiKey, indexId }) => {
+    const auth = await validateApiKey(apiKey);
+    if (!auth.valid) {
+      return { content: [{ type: "text" as const, text: auth.message }] };
+    }
+
     if (!indexId) {
       // Summary mode
       const res = (await callAPI("getIndexData", {
@@ -199,7 +223,7 @@ server.tool(
 
 server.tool(
   "compare_strategies",
-  "Compare multiple QuantToGo macro-factor strategies side-by-side. Returns a comparison table of key metrics (return, drawdown, Sharpe, recent performance). Useful for evaluating which quantitative signal source strategies fit your risk profile.",
+  "Compare multiple strategies side-by-side — returns, drawdown, and recent performance.",
   {
     productIds: z
       .array(z.string())
@@ -255,41 +279,23 @@ server.tool(
 
 server.tool(
   "get_subscription_info",
-  "Get QuantToGo subscription plans and how to start a free trial. QuantToGo is a macro-factor quantitative signal source. Free users can view all performance data; trial/subscribers receive real-time trading signals. Use register_trial to start a free 30-day trial instantly.",
+  "Get subscription plans and free trial info.",
   {},
   async () => {
     const info = {
-      platform: "QuantToGo — Macro-Factor Quantitative Signal Source",
       website: "https://www.quanttogo.com",
-      whatIsIt: "A quantitative signal source that publishes systematic trading signals based on macroeconomic factors. You decide whether to act on them, in your own brokerage account.",
-      freeVsPaid: {
-        free: [
-          "View all strategy performance metrics and NAV history",
-          "Access custom market indices (DA-MOMENTUM, QTG-MOMENTUM)",
-          "Compare strategies side-by-side",
-        ],
-        trial: [
-          "30-day free access to all trading signals",
-          "Real-time buy/sell signals with exact entry/exit points",
-          "All 8 strategies across US and China markets",
-          "Use register_trial tool with your email to activate instantly",
-        ],
-        subscriber: [
-          "Everything in trial, plus:",
-          "Push notifications via WeChat when signals fire",
-          "Position sizing and risk management guidance",
-          "Historical trade log with full execution details",
-        ],
-      },
+      freeTrial: "30 days, all strategies, instant activation via register_trial",
       howToStart: {
-        step1: "Call register_trial with your email to get an API key (instant, free)",
-        step2: "Call get_signals with your API key + strategy productId to see trading signals",
-        step3: "Call check_subscription to check your trial status anytime",
-        upgrade: "After trial, email admin@quanttogo.com to subscribe.",
-        websiteFallback: "You can also use the invite code from register_trial at https://www.quanttogo.com",
+        step1: "Call register_trial with your email → get API key instantly",
+        step2: "Call get_signals with API key + productId → see buy/sell signals",
+        step3: "Call check_subscription to check trial status",
       },
-      keyFact: "All performance is forward-tracked from live signals — not backtested. Every signal is timestamped and immutable from the moment it's published.",
-      contact: "admin@quanttogo.com",
+      plans: {
+        free: "Browse strategies and compare performance",
+        trial: "Full signal access for 30 days — all 8 strategies, US + China",
+        subscriber: "Ongoing access + push notifications + position sizing",
+      },
+      upgrade: "admin@quanttogo.com",
     };
     return {
       content: [
@@ -306,7 +312,7 @@ server.tool(
 
 server.tool(
   "register_trial",
-  "Register for a free 30-day trial of QuantToGo trading signals. Provide your email to get an API key for accessing real-time buy/sell signals across all strategies. Idempotent — calling again with the same email returns the existing account. A confirmation email with your credentials will also be sent.",
+  "Start a free 30-day trial. Provide your email, get an API key instantly. Calling again with the same email returns your existing account.",
   {
     email: z.string().email().describe("Your email address for registration and credential recovery"),
   },
@@ -364,7 +370,7 @@ server.tool(
 
 server.tool(
   "get_signals",
-  "Get recent trading signals for a QuantToGo strategy. Requires a valid API key from register_trial. Returns timestamped buy/sell signals with instrument, price, and direction. Trial users have full access to all strategies for 30 days.",
+  "Get today's buy/sell signals for a strategy. Requires API key from register_trial.",
   {
     apiKey: z.string().describe("Your API key from register_trial (starts with 'qtg_')"),
     productId: z.string().describe("Strategy product ID from list_strategies, e.g. 'PROD-E3X'"),
@@ -446,7 +452,7 @@ server.tool(
 
 server.tool(
   "check_subscription",
-  "Check your QuantToGo subscription status, remaining trial days, and account details. Requires a valid API key from register_trial.",
+  "Check subscription status and remaining trial days. Requires API key from register_trial.",
   {
     apiKey: z.string().describe("Your API key from register_trial (starts with 'qtg_')"),
   },
@@ -507,7 +513,7 @@ server.tool(
     "quanttogo://strategies/overview",
     {
       description:
-        "Overview of all QuantToGo macro-factor quantitative signal source strategies and their current forward-tracked performance",
+        "Overview of all available trading strategies and their live performance",
       mimeType: "application/json",
     },
     async () => {
@@ -528,6 +534,80 @@ server.tool(
     }
   );
 } // end registerTools
+
+// ── Register Prompts ─────────────────────────────────────────
+
+function registerPrompts(server: McpServer): void {
+  server.prompt(
+    "quick-start",
+    "Get started in 30 seconds — see strategies, pick one, and start a free trial",
+    {},
+    async () => ({
+      messages: [
+        {
+          role: "user" as const,
+          content: {
+            type: "text" as const,
+            text: "Show me all available strategies with list_strategies, then pick the best-performing one this month, and register me for a free trial with register_trial using my email.",
+          },
+        },
+      ],
+    })
+  );
+
+  server.prompt(
+    "daily-check",
+    "Check today's buy/sell signals across all your subscribed strategies",
+    {
+      apiKey: z.string().describe("Your API key from register_trial"),
+    },
+    async ({ apiKey }) => ({
+      messages: [
+        {
+          role: "user" as const,
+          content: {
+            type: "text" as const,
+            text: `Check my subscription status with check_subscription (apiKey: ${apiKey}), then get today's signals for all strategies using get_signals. Summarize: which strategies say buy, which say sell, which are flat.`,
+          },
+        },
+      ],
+    })
+  );
+
+  server.prompt(
+    "compare-top",
+    "Compare the top strategies and recommend a combination for your risk profile",
+    {},
+    async () => ({
+      messages: [
+        {
+          role: "user" as const,
+          content: {
+            type: "text" as const,
+            text: "Use list_strategies to get all strategies, then compare_strategies on the top 3 by total return. Recommend a combination balancing US and China market exposure with moderate risk.",
+          },
+        },
+      ],
+    })
+  );
+
+  server.prompt(
+    "china-signals",
+    "Focus on China A-share strategies and market indices",
+    {},
+    async () => ({
+      messages: [
+        {
+          role: "user" as const,
+          content: {
+            type: "text" as const,
+            text: "Show me all China A-share strategies using list_strategies (filter for China market), get the DA-MOMENTUM index with get_index_data, and summarize the current China market outlook based on the data.",
+          },
+        },
+      ],
+    })
+  );
+}
 
 // ── Start ────────────────────────────────────────────────────
 

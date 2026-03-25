@@ -1,7 +1,7 @@
 {
   "name": "quanttogo-mcp",
-  "version": "0.2.2",
-  "description": "QuantToGo MCP Server — macro-factor quantitative signal source for AI agents. Forward-tracked trading strategies across US and China markets.",
+  "version": "0.3.0",
+  "description": "MCP Server for AI trading signals — 8 live strategies across US and China markets. Free 30-day trial.",
   "mcpName": "com.quanttogo/quanttogo-mcp",
   "main": "dist/index.js",
   "bin": {
@@ -22,14 +22,14 @@
   "keywords": [
     "mcp",
     "model-context-protocol",
-    "quantitative-signal-source",
-    "macro-factor",
-    "quantitative-trading",
     "trading-signals",
-    "forward-tracked",
+    "ai-trading",
+    "quantitative",
     "market-data",
     "ai-agent",
-    "finance"
+    "finance",
+    "stocks",
+    "china-a-share"
   ],
   "author": "QuantToGo <admin@quanttogo.com>",
   "license": "MIT",

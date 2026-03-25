@@ -1,17 +1,17 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
   "name": "com.quanttogo/quanttogo-mcp",
-  "description": "Macro-factor quantitative signal source for US and China stock markets via MCP.",
+  "description": "AI trading signals — 8 live strategies across US and China markets. Free 30-day trial.",
   "repository": {
     "url": "https://github.com/QuantToGo/quanttogo-mcp",
     "source": "github"
   },
-  "version": "0.2.2",
+  "version": "0.3.0",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "quanttogo-mcp",
-      "version": "0.2.2",
+      "version": "0.3.0",
       "transport": {
         "type": "stdio"
       }
